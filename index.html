@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#100c20"><title>um universo chamado Ana ✦</title>
+<style>
+:root{--bg:#100c20;--pink:#ff8fc8;--lav:#c7a5ff;--white:#fff5fc}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--white);font-family:system-ui,-apple-system,sans-serif;overflow-x:hidden}
+button{font:inherit;cursor:pointer;color:inherit}
+
+/* Canvas interativo no fundo */
+#universoCanvas {
+    position: fixed;
+    inset: 0;
+    pointer-events: none; /* Permite clicar nos botões da frente */
+    z-index: -1;
+    background: radial-gradient(ellipse at 50% 10%,#3c2057 0%,#17122b 45%,#100c20 80%);
+}
+
+main{max-width:850px;margin:auto;padding:24px 20px 80px; position: relative; z-index: 1;}
+.screen{min-height:90svh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:45px 0}
+.kicker{font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--pink)}h1{font-size:clamp(43px,10vw,82px);line-height:1.03;letter-spacing:-3px;margin:18px 0}h1 em{font-family:Georgia,serif;font-weight:400;color:var(--pink)}h2{font-size:clamp(28px,7vw,43px);letter-spacing:-1px;font-weight:600;margin:12px 0}p{color:#d9cbe9;line-height:1.75}.sub{max-width:500px}.btn{border:1px solid #ffffff2b;background:#ffffff0b;border-radius:99px;padding:13px 19px;transition:.25s}.btn:hover{transform:translateY(-3px);border-color:var(--pink);background:#ff8fc81c}.btn.hot{background:linear-gradient(120deg,#ff9bcf,#c7a5ff);color:#21122d;border:0;font-weight:750;box-shadow:0 8px 30px #ff8fc82b; pointer-events: auto;}
+.heart{font-size:84px;filter:drop-shadow(0 0 22px #ff69bd65);animation:pulse 1.7s infinite;cursor:pointer; pointer-events: auto;}@keyframes pulse{50%{transform:scale(1.12)}}.hint{font-size:12px;color:#aa98c2;margin-top:16px}
+.row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:22px}.card{width:100%;border:1px solid #ffffff19;background:linear-gradient(145deg,#ffffff0c,#ffffff04);border-radius:24px;padding:24px;text-align:center;box-shadow:0 20px 60px #0002; backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);}.zone{padding:50px 0;scroll-margin-top:20px}.center{text-align:center}.choices{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:22px 0}.choice{min-height:115px;border:1px solid #ffffff1d;background:#ffffff08;border-radius:18px;padding:18px;transition:.2s; pointer-events: auto;}.choice:hover{transform:scale(1.025);border-color:var(--lav)}.choice span{display:block;font-size:28px;margin-bottom:8px}.output{min-height:55px;color:var(--pink);font-size:17px;line-height:1.7;margin-top:20px}
+.meter{height:9px;background:#ffffff14;border-radius:99px;overflow:hidden;margin:20px auto;max-width:340px}.meter div{height:100%;width:0;background:linear-gradient(90deg,var(--pink),var(--lav));transition:width .3s}.orb{width:150px;height:150px;margin:20px auto;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 35% 25%,#ffe0f5,#ff8fc8 25%,#9d6bdb 65%,#3a225c);box-shadow:0 0 55px #bb79ff45;transition:transform .2s;user-select:none; pointer-events: auto;}.orb span{font-size:47px}.orb:active{transform:scale(.92)}.garden{display:flex;justify-content:center;align-items:end;gap:12px;min-height:120px;margin:20px 0}.flower{font-size:32px;animation:grow .6s cubic-bezier(.2,.8,.3,1) both}@keyframes grow{from{transform:translateY(20px) scale(0);opacity:0}to{transform:none;opacity:1}}
+#finale{display:none;position:fixed;inset:0;background:#100c20f5;z-index:20;place-items:center;text-align:center;padding:25px}.finalbox{max-width:520px}.float{position:fixed;bottom:-40px;z-index:30;pointer-events:none;animation:fly 4s ease-in forwards}@keyframes fly{to{transform:translateY(-115vh) rotate(35deg);opacity:0}}.small{font-size:12px;color:#a997bb}footer{text-align:center;padding:35px 0;color:#9684aa;font-size:12px}
+@media(max-width:500px){main{padding-inline:17px}.choices{grid-template-columns:1fr}.choice{min-height:85px;display:flex;align-items:center;text-align:left;gap:14px}.choice span{margin:0}.screen{min-height:85svh}}
+</style></head>
+<body>
+
+<canvas id="universoCanvas"></canvas>
+
+<main>
+<section class="screen" id="top">
+ <div class="kicker">um lugarzinho só seu</div><div class="heart" onclick="burst(8)">♡</div>
+ <h1>O universo fica<br><em>mais bonito</em> com você.</h1>
+ <p class="sub">Ana, esse cantinho não é pra você ler uma carta. É pra brincar, tocar, descobrir e ver o carinho virar pequenas surpresas. 🫣❤️</p>
+ <button class="btn hot" onclick="go('play')">Entrar no nosso universo ✦</button><div class="hint">psiu… experimenta tocar no coração também</div>
+</section>
+
+<section class="zone" id="play"><div class="center"><div class="kicker">01 / escolhe o caminho</div><h2>O que vamos desbloquear?</h2><p>Escolha uma porta. Cada uma faz acontecer uma coisinha diferente.</p></div>
+ <div class="choices">
+  <button class="choice" onclick="magic('compliment')"><span>🌷</span><b>Uma chuva de carinho</b><div class="small">descubra o efeito Ana</div></button>
+  <button class="choice" onclick="magic('stars')"><span>🌌</span><b>Um céu só seu</b><div class="small">acenda as estrelinhas</div></button>
+  <button class="choice" onclick="magic('flower')"><span>🌸</span><b>Fazer florescer</b><div class="small">crie um jardim de amor</div></button>
+  <button class="choice" onclick="magic('wish')"><span>🎁</span><b>Presente misterioso</b><div class="small">tem um segredo aqui</div></button>
+ </div><div class="card"><div id="magicEmoji" style="font-size:38px">✨</div><div class="output" id="magicOut">Sua surpresa aparece aqui. Toca numa das portas acima. ♡</div><div class="garden" id="garden"></div><button class="btn" onclick="resetMagic()">Começar outra vez ↻</button></div>
+</section>
+
+<section class="zone" id="heartgame"><div class="center"><div class="kicker">02 / jogo do carinho</div><h2>Consegue encher esse coração?</h2><p>Toque no coração brilhante 10 vezes e veja o que acontece. 💞</p></div>
+ <div class="card"><div class="orb" id="orb" onclick="tapHeart()"><span>💗</span></div><div style="font-size:14px" id="count">0 / 10 toques</div><div class="meter"><div id="bar"></div></div><div class="output" id="gameOut">Cada toque deixa esse cantinho mais cheio de carinho.</div><button class="btn" onclick="resetGame()">Recomeçar</button></div>
+</section>
+
+<section class="zone"><div class="center"><div class="kicker">03 / escolha com o coração</div><h2>Qual surpresa combina com você agora?</h2><p>Não tem resposta errada. Só resultados fofos. 🌙</p></div>
+ <div class="row"><button class="btn" onclick="quiz('abraço')">Preciso de um abraço 🫂</button><button class="btn" onclick="quiz('risada')">Quero dar risada 🤭</button><button class="btn" onclick="quiz('magia')">Quero magia ✨</button></div><div class="card" style="margin-top:18px"><div class="output" id="quizOut">Escolha uma opção pra revelar sua surpresa.</div></div>
+</section>
+
+<section class="zone center"><div class="kicker">04 / o botão final</div><h2>Tem uma última coisinha…</h2><p>Esse botão foi feito pra você. Não dá pra saber o que acontece até tocar. 👀</p><button class="btn hot" onclick="document.getElementById('finale').style.display='grid';burst(45)">Desbloquear surpresa final 💝</button></section>
+
+<footer>um universo interativo feito por João, para o Amor da minha vida ♡</footer>
+</main>
+
+<div id="finale" onclick="if(event.target===this)this.style.display='none'"><div class="finalbox"><div style="font-size:64px">💗✨🌷</div><div class="kicker">surpresa desbloqueada</div><h2>Seus olhos são mais lindos que qualquer estrela.</h2><p>Obrigado por existir e por fazer parte da minha vida, Ana. Que nunca faltem motivos pra sorrir, descobrir coisas novas e viver momentos bonitos — juntos, um dia de cada vez. ❤️</p><button class="btn hot" onclick="burst(50)">Mais uma chuva de amor ♡</button><div class="hint">toque fora desta janela para voltar ao site</div></div></div>
+
+<script>
+// --- CÓDIGO DA INTERFACE ---
+const phrases=['Seu sorriso devia ser considerado patrimônio das coisas bonitas. 🌷','Você merece carinho nos dias incríveis e nos dias difíceis também. 💗','Tem gente que ilumina um lugar só por chegar. Você é assim. ✨','Se esse site conseguiu te fazer sorrir, já valeu cada linha de código. ','Um lembrete aleatório: você é importante, muito mais do que imagina. ♡'];
+function go(id){document.getElementById(id).scrollIntoView({behavior:'smooth'})}
+function burst(n=14){for(let i=0;i<n;i++){let x=document.createElement('span');x.className='float';x.textContent=['💗','♡','✨','🌸','💖'][Math.floor(Math.random()*5)];x.style.left=Math.random()*100+'vw';x.style.fontSize=(17+Math.random()*24)+'px';x.style.animationDuration=(2.5+Math.random()*2.5)+'s';document.body.appendChild(x);setTimeout(()=>x.remove(),5500)}}
+function magic(type){const out=document.getElementById('magicOut'),emoji=document.getElementById('magicEmoji'),garden=document.getElementById('garden');garden.innerHTML='';
+if(type==='compliment'){emoji.textContent='💌';out.textContent=phrases[Math.floor(Math.random()*phrases.length)];burst(14)}
+if(type==='stars'){emoji.textContent='🌌';out.textContent='Pronto: o céu inteiro resolveu brilhar um pouquinho mais por você. Toca em outra porta pra continuar!';burst(10); criarExplosaoEstrelas();}
+if(type==='flower'){emoji.textContent='🌷';['🌱','🌷','🌸','🌼','🌺','💐'].forEach((f,i)=>{setTimeout(()=>{let e=document.createElement('span');e.className='flower';e.textContent=f;garden.appendChild(e)},i*180)});out.textContent='Você é mais linda que qualquer flor.';burst(9)}
+if(type==='wish'){emoji.textContent='🎁';out.textContent='SEGREDO DESBLOQUEADO: se você pudesse ver o quanto é especial pelos olhos de quem te ama, entenderia por que esse site existe. 💗';burst(22)}}
+function resetMagic(){document.getElementById('magicEmoji').textContent='✨';document.getElementById('magicOut').textContent='Sua surpresa aparece aqui. Toca numa das portas acima. ♡';document.getElementById('garden').innerHTML=''}
+let taps=0;function tapHeart(){if(taps<10)taps++;document.getElementById('count').textContent=taps+' / 10 toques';document.getElementById('bar').style.width=(taps*10)+'%';document.getElementById('orb').style.transform='scale('+(1+taps*.012)+')';burst(2);if(taps===10){document.getElementById('gameOut').textContent='Você desbloqueou: um lembrete de que merece amor leve, sincero e cheio de pequenas alegrias. 💖';burst(24)}else document.getElementById('gameOut').textContent=['O coração sentiu esse toque. ♡','Mais um pouquinho… ✨','Tá ficando mais brilhante!','Você tá carregando esse coração de carinho. 💗'][taps%4]}
+function resetGame(){taps=0;document.getElementById('count').textContent='0 / 10 toques';document.getElementById('bar').style.width='0';document.getElementById('gameOut').textContent='Cada toque deixa esse cantinho mais cheio de carinho.';document.getElementById('orb').style.transform='scale(1)'}
+
+// CORREÇÃO: As mensagens do quiz agora estão separadas e formatadas corretamente.
+function quiz(which) {
+    let msg = {
+        abraço: 'Fico te devendo um abraço! 🫂💗.',
+        risada: 'Você é um dos motivos do meu mundo ter cor, te amo viuu 🤭',
+        magia: '✨ PUF! Que seu dia ganhe uma surpresa boa, uma notícia feliz e um motivo pra sorrir. Obrigado por fazer meus dias melhores, te amo viu Ana Alice 🫶 🌙'
+    };
+    document.getElementById('quizOut').textContent = msg[which];
+    burst(12);
+}
+
+// --- CÓDIGO DO CANVAS INTERATIVO ---
+const canvas = document.getElementById('universoCanvas');
+const ctx = canvas.getContext('2d');
+let particulas = [];
+let mouse = { x: null, y: null, raio: 120 };
+
+function redimensionar() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', redimensionar);
+redimensionar();
+
+// Rastreamento para que as estrelas sigam os movimentos na tela inteira
+window.addEventListener('mousemove', e => { mouse.x = e.x; mouse.y = e.y; });
+window.addEventListener('touchmove', e => { mouse.x = e.touches[0].clientX; mouse.y = e.touches[0].clientY; }, {passive: true});
+window.addEventListener('mouseout', () => { mouse.x = null; mouse.y = null; });
+window.addEventListener('touchend', () => { mouse.x = null; mouse.y = null; });
+
+class Particula {
+    constructor(x, y, dx, dy, tamanho) {
+        this.x = x; this.y = y; this.dx = dx; this.dy = dy; this.tamanho = tamanho;
+    }
+    desenhar() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.tamanho, 0, Math.PI * 2, false);
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+        ctx.fill();
+    }
+    atualizar() {
+        if (this.x > canvas.width || this.x < 0) this.dx = -this.dx;
+        if (this.y > canvas.height || this.y < 0) this.dy = -this.dy;
+        this.x += this.dx; this.y += this.dy;
+        this.desenhar();
+    }
+}
+
+function iniciarCanvas() {
+    particulas = [];
+    let num = (canvas.width * canvas.height) / 9000;
+    for (let i = 0; i < num; i++) {
+        let tamanho = Math.random() * 2 + 0.5;
+        let x = Math.random() * innerWidth;
+        let y = Math.random() * innerHeight;
+        let dx = (Math.random() - 0.5) * 1;
+        let dy = (Math.random() - 0.5) * 1;
+        particulas.push(new Particula(x, y, dx, dy, tamanho));
+    }
+}
+
+function conectarEstrelas() {
+    for (let a = 0; a < particulas.length; a++) {
+        for (let b = a; b < particulas.length; b++) {
+            let dist = ((particulas[a].x - particulas[b].x) ** 2) + ((particulas[a].y - particulas[b].y) ** 2);
+            if (dist < (canvas.width/7) * (canvas.height/7)) {
+                ctx.strokeStyle = `rgba(255, 255, 255, ${1 - dist/10000})`;
+                ctx.lineWidth = 0.5;
+                ctx.beginPath();
+                ctx.moveTo(particulas[a].x, particulas[a].y);
+                ctx.lineTo(particulas[b].x, particulas[b].y);
+                ctx.stroke();
+            }
+        }
+        if (mouse.x && mouse.y) {
+            let distMouse = ((particulas[a].x - mouse.x) ** 2) + ((particulas[a].y - mouse.y) ** 2);
+            if (distMouse < mouse.raio * mouse.raio) {
+                ctx.strokeStyle = 'rgba(255, 143, 200, 0.7)'; // Linha rosa conectando ao cursor
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(particulas[a].x, particulas[a].y);
+                ctx.lineTo(mouse.x, mouse.y);
+                ctx.stroke();
+            }
+        }
+    }
+}
+
+function criarExplosaoEstrelas() {
+    for(let i=0; i<40; i++){
+        particulas.push(new Particula(Math.random() * innerWidth, Math.random() * innerHeight, (Math.random()-0.5)*3, (Math.random()-0.5)*3, 2));
+    }
+}
+
+function animarCanvas() {
+    requestAnimationFrame(animarCanvas);
+    ctx.clearRect(0, 0, innerWidth, innerHeight);
+    particulas.forEach(p => p.atualizar());
+    conectarEstrelas();
+}
+
+iniciarCanvas();
+animarCanvas();
+</script></body></html>
